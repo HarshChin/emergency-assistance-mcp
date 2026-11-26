@@ -70,7 +70,8 @@ reservation is one guarded `UPDATE`, and `CHECK` constraints on `funds` are the 
 
 ## 2. Time
 
-From [TIME_LOG.md](../TIME_LOG.md), clock times taken with `date`.
+From [TIME_LOG.md](../TIME_LOG.md), clock times taken with `date`. Reading the brief and checking
+the SDK docs happened before 15:59 and were not timed.
 
 | Part | Minutes |
 |---|---|
@@ -78,7 +79,6 @@ From [TIME_LOG.md](../TIME_LOG.md), clock times taken with `date`.
 | Of which: review, decisions and questions (plan, PRD, tech spec, architecture) | 114 |
 | Of which: AI writing specs, code, tests and this writeup (tasks 0 to 15) | 27 |
 | Later the same day: fixing a test gap found in review, re-verifying, updating these notes (19:05 to 19:06) | 1 |
-| Before 15:59: ideation, reading the brief, checking SDK docs | not captured |
 
 ## 3. Known limitations
 

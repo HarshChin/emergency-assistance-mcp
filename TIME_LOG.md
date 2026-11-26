@@ -1,12 +1,11 @@
 # Time log
 
-Clock times are taken with `date` on the machine (IST) when a stage starts and stops.
-Anything not captured that way is marked as such rather than estimated.
+Clock times are taken with `date` on the machine (IST) when a stage starts and stops. The log
+starts at 15:59, the first timestamp taken; reading the brief and checking the SDK docs happened
+before that and were not timed, so they are not estimated here.
 
 | Stage | Start | Stop | Minutes | Notes |
 |---|---|---|---|---|
-| Ideation before the recorded session | not captured | not captured | – | Not recorded. |
-| Read brief, check SDK docs, questions | not captured | 15:59 | – | First timestamp taken at 15:59, after the brief and SDK docs were read. |
 | Decisions on open questions, plan written, plan reviewed and approved | 15:59 | 16:50 | 51 | Includes Harshvardhan's review time. |
 | Task 0: repo, plan, ADR, logs | 16:50 | 16:51 | 1 | |
 | Task 1: PRD | 16:51 | 16:53 | 2 | Stops when the PRD is committed; review time is logged separately. |
@@ -37,7 +36,6 @@ Anything not captured that way is marked as such rather than estimated.
 | Recorded span of the build, 15:59 to 18:20 | 141 |
 | Review, decisions and questions (the three review rows plus the planning row) | 114 |
 | AI writing specs, code, tests and the writeup (task rows) | 27 |
-| Before 15:59 (ideation, reading the brief, checking SDK docs) | not captured |
 
 Task rows are short because each is the AI's working time by the machine clock.
 114 + 27 = 141, the recorded span of the build. The later fix found in review took a further minute.
