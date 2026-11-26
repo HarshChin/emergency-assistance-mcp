@@ -10,6 +10,9 @@ Every function takes the Caller first and follows the same order:
 Nonprofit boundary: every statement on staff-owned data has
 "nonprofit_id = caller.nonprofit_id" in its WHERE clause, so a record of another
 nonprofit looks exactly like a record that does not exist.  # REQ: SEC-06
+
+Text that staff type (purpose, reject reason) is stored and returned as it is.
+No code here or anywhere else reads it to make a decision.  # REQ: SEC-08
 """
 
 import sqlite3
@@ -90,7 +93,11 @@ def _now() -> str:
 
 
 def _update_request(conn: sqlite3.Connection, sql: str, values: tuple) -> None:
-    """Run an UPDATE that must change exactly one request row."""
+    """Run an UPDATE that must change exactly one request row.
+
+    Callers only ever set status, decided_*, reject_reason and paid_*. No statement in
+    this module changes a request's participant, fund, amount or purpose.  # REQ: BR-09
+    """
     if conn.execute(sql, values).rowcount != 1:
         raise RuntimeError("request row was not updated as expected")  # rolls the transaction back
 

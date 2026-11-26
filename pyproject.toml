@@ -6,6 +6,7 @@ authors = [
     { name = "Harshvardhan Chincholkar" }
 ]
 requires-python = ">=3.12"
+# REQ: NFR-03 - exact versions here, full dependency tree pinned in uv.lock
 dependencies = [
     "mcp==2.3.0",
     "pydantic==2.14.4",

@@ -18,6 +18,7 @@ BUSY_TIMEOUT_MS = 5000  # how long a writer waits for another process to finish
 
 
 def db_path() -> Path:
+    """The one SQLite file that holds all data between server runs."""  # REQ: FR-11
     return Path(os.environ.get(DB_PATH_VARIABLE, DEFAULT_DB_PATH))
 
 
