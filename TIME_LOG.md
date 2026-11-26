@@ -17,3 +17,4 @@ Anything not captured that way is marked as such rather than estimated.
 | Architecture review | 17:52 | 17:59 | 7 | Harshvardhan reviewing. |
 | Task 4: scaffold, SDK check | 17:59 | 18:01 | 2 |  |
 | Task 5: money, rules, errors | 18:01 | 18:02 | 1 |  |
+| Task 6: schema, db, seed | 18:02 | 18:03 | 1 |  |
