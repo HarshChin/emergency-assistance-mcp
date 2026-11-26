@@ -22,3 +22,4 @@ Anything not captured that way is marked as such rather than estimated.
 | Task 8: service reads | 18:04 | 18:05 | 1 |  |
 | Task 9: service writes | 18:05 | 18:07 | 2 |  |
 | Task 10: MCP tools | 18:07 | 18:08 | 1 |  |
+| Task 11: stdio end-to-end and multi-process tests | 18:08 | 18:13 | 5 | Includes 5 repeat runs and 3 deliberate breaks of the guard. |

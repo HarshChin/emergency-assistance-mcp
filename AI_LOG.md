@@ -31,6 +31,25 @@ as the work happens. Corrections are logged only when they actually occurred.
 | My input | I raised that stdio means one server process per client, so an in-memory lock cannot work; the AI confirmed and built the design on the database. |
 | How it was checked | Plan reviewed and approved by me before any file was created. The concurrency claim is to be proven by the multi-process test (task 11), including one deliberate break of the guard to see the test fail. |
 
+## 4. Verifying the overspending protection (2026-11-26)
+
+| | |
+|---|---|
+| Asked | "I want a test that actually starts multiple server processes and makes them fight over the same fund." |
+| AI wrote | `tests/test_stdio_processes.py`: ten real `python -m assistance.server` processes each approve a different $300.00 request against a $1,000.00 fund at the same moment. Expected: exactly 3 approved, 7 `INSUFFICIENT_FUNDS`, $900.00 committed. Also eight processes approving, then paying, one request; and eight processes sending the same create. |
+| Result | Passed on the first run and on 5 further runs of the race tests (25 race test executions, 0 failures). |
+| Why a pass alone was not trusted | A race test that always passes might simply not be racing. So the protection was broken on purpose three ways and the same test was rerun each time. Source was restored with `git checkout -- src/` after each. |
+
+| Deliberate break | What was changed | What the test did |
+|---|---|---|
+| A | Approval checks the balance in Python with no lock held, then adds to committed; the `CHECK` constraint on `funds` removed | Failed, all 3 attempts. In the failure shown, only 1 of 10 approvals was refused: 9 approved, $2,700.00 against a $1,000.00 fund. This is the overspend the design prevents. |
+| B | Same naive approval, `CHECK` constraint kept | Failed, all 3 attempts, but differently: exactly 3 were approved and 7 refused, and some refusals were crashes (`Error executing tool approve_request`) instead of `INSUFFICIENT_FUNDS`. The constraint stopped the overspend on its own. |
+| C | Only `BEGIN IMMEDIATE` changed to plain `BEGIN` | Failed, all 3 attempts: the wrong number were approved and the refusals were crashes with no error code. The cause of the crashes was not inspected further (expected to be SQLite refusing a late lock upgrade). |
+
+With the code restored the test passed again. Conclusion: the test does race, the guarded
+`UPDATE` under `BEGIN IMMEDIATE` is what gives the clean result, and the `CHECK` constraint is a
+working backstop.
+
 ## Corrections
 
 | # | Date | What was wrong | How it was noticed | Fix |
