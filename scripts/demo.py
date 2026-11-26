@@ -8,9 +8,10 @@ request, a program manager approves it, finance records the payment, and the
 final funding summary is checked against the example in the brief.
 Exit code 0 means the final summary was exactly as expected.
 
-Output is laid out for reading in a terminal: fields are aligned, lists are
-tables, and fields that are not set yet are left out. Colour is used only when
-the output is a terminal (and NO_COLOR is not set).
+For every step the output shows the complete tool call (name and every
+argument, exactly as sent) and then what came back. Fields are aligned, lists
+are tables, and fields that are not set yet are left out. Colour is used only
+when the output is a terminal (and NO_COLOR is not set).
 """
 
 import asyncio
@@ -52,6 +53,15 @@ def as_text(value) -> str:
     return str(value).lower() if isinstance(value, bool) else str(value)
 
 
+def format_call(tool: str, arguments: dict) -> str:
+    """The call as it was sent: tool(name='value', ...). One argument per line if it is long."""
+    parts = [f"{name}={value!r}" for name, value in arguments.items()]
+    one_line = f"{tool}({', '.join(parts)})"
+    if len(one_line) <= WIDTH - 4:
+        return one_line
+    return f"{tool}(\n" + "".join(f"        {part},\n" for part in parts) + "    )"
+
+
 def print_fields(fields: dict, indent: int = 6) -> None:
     """A record as aligned "name  value" lines. Unset (null) fields are left out."""
     # {"request": {...}, "replayed": false} is shown as one list of fields.
@@ -83,16 +93,25 @@ def print_table(rows: list[dict], indent: int = 6) -> None:
         print(" " * indent + "  ".join(cell(c, as_text(row[c])) for c in columns).rstrip())
 
 
-def show(label: str, result) -> dict | None:
-    """Print one tool result: its data on success, the error text on refusal."""
+async def call(client: Client, tool: str, arguments: dict, note: str = "") -> dict | None:
+    """Call one tool. Print exactly what was sent, then what came back.
+
+    Returns the structured result, or None if the call was refused.
+    """
+    result = await client.call_tool(tool, arguments)
+
+    print()
+    if note:
+        print("  " + paint(f"# {note}", DIM))
+    print("  " + paint("▸ " + format_call(tool, arguments), BOLD))
+
     if result.is_error:
-        print(f"\n  {paint('✗ refused ', RED)}  {paint(label, BOLD)}")
+        print("  " + paint("✗ refused", RED))
         for line in textwrap.wrap(result.content[0].text, WIDTH - 6):
             print("      " + line)
         return None
     data = result.structured_content
-    mark = paint("↻ replayed", YELLOW) if data.get("replayed") else paint("✓ ok      ", GREEN)
-    print(f"\n  {mark}  {paint(label, BOLD)}")
+    print("  " + (paint("↻ replayed (nothing changed)", YELLOW) if data.get("replayed") else paint("✓ ok", GREEN)))
     print_fields(data)
     return data
 
@@ -133,38 +152,43 @@ async def main() -> int:
             print("      " + ", ".join(create_tool.output_schema["properties"]))
 
             title("Case worker looks up a participant and a fund, then creates a request")
-            show("list_participants(name_contains='Alex')", await case_worker.call_tool("list_participants", {"name_contains": "Alex"}))
-            show("list_funds()", await case_worker.call_tool("list_funds", {}))
-            show(f"get_funding_summary('{FUND}')   before", await case_worker.call_tool("get_funding_summary", {"fund_id": FUND}))
-            request_arguments = {
+            await call(case_worker, "list_participants", {"name_contains": "Alex"})
+            await call(case_worker, "list_funds", {})
+            await call(case_worker, "get_funding_summary", {"fund_id": FUND}, note="the fund before anything happens")
+            new_request = {
                 "participant_id": "part_cb_1",
                 "fund_id": FUND,
                 "amount_usd": "300.00",
                 "purpose": "March rent",
                 "idempotency_key": "demo-request-1",
             }
-            created = show("create_request($300.00, 'March rent')", await case_worker.call_tool("create_request", request_arguments))
+            created = await call(case_worker, "create_request", new_request)
             request_id = created["request"]["request_id"]
 
             title("Things that are refused or have no second effect")
-            show("create_request again with the same key", await case_worker.call_tool("create_request", request_arguments))
-            show("create_request with amount '300'", await case_worker.call_tool("create_request", {**request_arguments, "amount_usd": "300", "idempotency_key": "demo-request-2"}))
-            show("approve_request as a case worker", await case_worker.call_tool("approve_request", {"request_id": request_id}))
+            await call(case_worker, "create_request", new_request, note="the same call again, same idempotency_key")
+            await call(
+                case_worker,
+                "create_request",
+                {**new_request, "amount_usd": "300", "idempotency_key": "demo-request-2"},
+                note="amount without decimals: dollars or cents?",
+            )
+            await call(case_worker, "approve_request", {"request_id": request_id}, note="a case worker tries to approve")
 
         title("Program manager staff_cb_pm1 approves it (a new server process)")
         async with server_as("staff_cb_pm1", log_file) as manager:
-            show("approve_request", await manager.call_tool("approve_request", {"request_id": request_id}))
-            show("approve_request again: nothing is reserved twice", await manager.call_tool("approve_request", {"request_id": request_id}))
-            show(f"get_funding_summary('{FUND}')   after approval", await manager.call_tool("get_funding_summary", {"fund_id": FUND}))
+            await call(manager, "approve_request", {"request_id": request_id})
+            await call(manager, "approve_request", {"request_id": request_id}, note="the same call again: nothing is reserved twice")
+            await call(manager, "get_funding_summary", {"fund_id": FUND}, note="the fund after approval")
 
         title("A manager of the other nonprofit cannot see the request at all")
         async with server_as("staff_rr_pm1", log_file) as outsider:
-            show("get_request as staff_rr_pm1", await outsider.call_tool("get_request", {"request_id": request_id}))
+            await call(outsider, "get_request", {"request_id": request_id}, note="called by staff_rr_pm1 of Riverside Relief")
 
         title("Finance staff_cb_fin1 records the payment (a new server process)")
         async with server_as("staff_cb_fin1", log_file) as finance:
-            show("record_payment", await finance.call_tool("record_payment", {"request_id": request_id}))
-            final = show(f"get_funding_summary('{FUND}')   final", await finance.call_tool("get_funding_summary", {"fund_id": FUND}))
+            await call(finance, "record_payment", {"request_id": request_id})
+            final = await call(finance, "get_funding_summary", {"fund_id": FUND}, note="the fund at the end")
 
     title("Server log (stderr of the server processes, kept apart from the protocol)")
     log_lines = [line for line in SERVER_LOG.read_text().splitlines() if "tool=" in line]
