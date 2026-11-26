@@ -33,4 +33,6 @@ as the work happens. Corrections are logged only when they actually occurred.
 
 ## Corrections
 
-None so far.
+| # | Date | What was wrong | How it was noticed | Fix |
+|---|---|---|---|---|
+| 1 | 2026-11-26 | The AI-written PRD said in NFR-02 that every refusal carries an error code, and in AC-21 that every bad amount, including the number `300`, gets an error showing the expected form. | While writing the tech spec the AI compared this with the SDK docs: arguments are validated against the input schema before tool code runs, so a wrong type is refused by the SDK with its own text. | PRD NFR-02 and AC-21 reworded; logged as revision 1 in `docs/REVISIONS.md`. The underlying SDK behaviour is still unverified by running code (tech spec section 12, S1). |
