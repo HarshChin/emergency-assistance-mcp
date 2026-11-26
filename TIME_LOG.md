@@ -33,9 +33,9 @@ Anything not captured that way is marked as such rather than estimated.
 | Part | Minutes |
 |---|---|
 | Recorded span, 15:59 to 18:20 | 141 |
-| Review, decisions and questions (rows marked as review, plus the planning row) | 116 |
+| Review, decisions and questions (the three review rows plus the planning row) | 114 |
 | AI writing specs, code, tests and the writeup (task rows) | 27 |
 | Before 15:59 (ideation, reading the brief, checking SDK docs) | not captured |
 
-Task rows are short because each is the AI's working time by the machine clock. The two
-parts do not add up exactly to the span because start and stop times are whole minutes.
+Task rows are short because each is the AI's working time by the machine clock.
+114 + 27 = 141, the recorded span.

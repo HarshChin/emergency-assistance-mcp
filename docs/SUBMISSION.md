@@ -70,7 +70,7 @@ From [TIME_LOG.md](../TIME_LOG.md), clock times taken with `date`.
 | Part | Minutes |
 |---|---|
 | Recorded span, 15:59 to 18:20 IST | 141 |
-| Of which: review, decisions and questions (plan, PRD, tech spec, architecture) | 116 |
+| Of which: review, decisions and questions (plan, PRD, tech spec, architecture) | 114 |
 | Of which: AI writing specs, code, tests and this writeup (tasks 0 to 15) | 27 |
 | Before 15:59: ideation, reading the brief, checking SDK docs | not captured |
 
