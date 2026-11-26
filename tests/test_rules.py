@@ -12,7 +12,8 @@ from assistance.rules import (
 ALL_ROLES = [CASE_WORKER, PROGRAM_MANAGER, FINANCE]
 ALL_STATUSES = [PENDING, APPROVED, REJECTED, PAID]
 
-# PRD section 6, written out in full so a change to the table must be deliberate.
+# PRD section 6, written out in full. The first two tests below compare the real tables with
+# these as a whole, so adding, changing or removing a rule fails until this file is edited too.
 EXPECTED_PERMISSIONS = {
     (READ, CASE_WORKER): True, (READ, PROGRAM_MANAGER): True, (READ, FINANCE): True,
     (CREATE, CASE_WORKER): True, (CREATE, PROGRAM_MANAGER): False, (CREATE, FINANCE): False,
@@ -27,6 +28,23 @@ EXPECTED_TRANSITIONS = {
     (PENDING, REJECT): REJECTED,
     (APPROVED, PAY): PAID,
 }
+
+
+@pytest.mark.req("SEC-04", "SEC-05")
+def test_the_permission_table_holds_exactly_the_prd_table_and_nothing_more():
+    actual = {
+        (action, role): role in allowed
+        for action, allowed in rules.ROLE_PERMISSIONS.items()
+        for role in ALL_ROLES
+    }
+    assert actual == EXPECTED_PERMISSIONS
+    for action, allowed in rules.ROLE_PERMISSIONS.items():
+        assert allowed <= set(ALL_ROLES), f"{action} is allowed for a role the PRD does not have"
+
+
+@pytest.mark.req("BR-02")
+def test_the_transition_table_holds_exactly_the_three_prd_transitions_and_nothing_more():
+    assert rules.STATUS_TRANSITIONS == EXPECTED_TRANSITIONS
 
 
 @pytest.mark.req("SEC-04", "SEC-05")
