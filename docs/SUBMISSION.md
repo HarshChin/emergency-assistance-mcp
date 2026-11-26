@@ -5,13 +5,8 @@ pasted from real runs; nothing is estimated.
 
 ## 1. Verification results
 
-Run on 2026-11-26 from a **fresh clone** of commit `db4b0cc` (macOS arm64, Python 3.12.13,
+Run on 2026-11-26 from a **fresh clone** of this repository (macOS arm64, Python 3.12.13,
 uv 0.12.12), using exactly the commands in the README.
-
-A note on commit hashes: before the first push, the author email on every commit was changed,
-which changes every hash but no file. This file quotes the published hashes. The run above was
-made on exactly the same files when that commit was still `9f4fbbb`, and two older commit
-messages still mention pre-push hashes (`a6ef267`, `9f4fbbb`).
 
 | Command | Result |
 |---|---|
@@ -65,7 +60,7 @@ reservation is one guarded `UPDATE`, and `CHECK` constraints on `funds` are the 
 | Other platforms | **Not run.** macOS arm64 and Python 3.12.13 only. |
 | More than 10 competing processes, or writes waiting longer than the 5 s busy timeout | **Not run.** |
 | Linting or type checking | **Not run.** None is configured. |
-| Rendering of the Mermaid diagram | **Not checked.** |
+| Rendering of the Mermaid diagram | Checked on GitHub: the sequence diagram in `ARCHITECTURE.md` renders correctly. |
 | Assumption S4 (tools run in worker threads) | Checked once with a throwaway script; no permanent test. |
 
 ## 2. Time
@@ -133,4 +128,4 @@ Claude Code was used throughout. Full record: [AI_LOG.md](../AI_LOG.md).
 | AI output | The multi-process test, which passed first time. |
 | Independent check | A first-time pass on a race test proves little, so the guard was broken three ways and each made the test fail (table in section 1). |
 | Correction | The AI's first random-sequence test also passed, but its printed outcome counts showed only 82 of 1,200 steps were successful actions; most were `NOT_FOUND` before any money logic ran. The action mix was fixed (210 successful afterwards) and a second test now fails if any outcome stops occurring. A deliberate payment bug then failed at seed 0. |
-| Correction found in review | After the build, rehearsing a requirement change showed that adding a permission or a transition to `rules.py` passed every test: the rules tests checked each expected entry but never that the tables held only those entries. Two whole-table assertions were added (commit `db4b0cc`); adding a rule now fails them. This is why the total is 248 tests, not the 246 of the first full run. |
+| Correction found in review | After the build, rehearsing a requirement change showed that adding a permission or a transition to `rules.py` passed every test: the rules tests checked each expected entry but never that the tables held only those entries. Two whole-table assertions were added; adding a rule now fails them. This is why the total is 248 tests, not the 246 of the first full run. |
