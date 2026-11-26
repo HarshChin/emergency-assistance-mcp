@@ -27,15 +27,17 @@ Anything not captured that way is marked as such rather than estimated.
 | Task 13: traceability script | 18:15 | 18:17 | 2 |  |
 | Task 14: demo script and README | 18:17 | 18:18 | 1 |  |
 | Task 15: fresh-clone verification and final writeup | 18:18 | 18:20 | 2 |  |
+| Other work, not part of the submission | 18:20 | 19:05 | – | Not counted. Listed so the gap in times is explained. |
+| Fix found in review: rules tests compare whole tables; fresh-clone re-run; notes updated | 19:05 | 19:06 | 1 | |
 
 ## Totals
 
 | Part | Minutes |
 |---|---|
-| Recorded span, 15:59 to 18:20 | 141 |
+| Recorded span of the build, 15:59 to 18:20 | 141 |
 | Review, decisions and questions (the three review rows plus the planning row) | 114 |
 | AI writing specs, code, tests and the writeup (task rows) | 27 |
 | Before 15:59 (ideation, reading the brief, checking SDK docs) | not captured |
 
 Task rows are short because each is the AI's working time by the machine clock.
-114 + 27 = 141, the recorded span.
+114 + 27 = 141, the recorded span of the build. The later fix found in review took a further 1 minutes.

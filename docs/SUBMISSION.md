@@ -5,7 +5,7 @@ pasted from real runs; nothing is estimated.
 
 ## 1. Verification results
 
-Run on 2026-11-26 from a **fresh clone** of commit `a6ef267` (macOS arm64, Python 3.12.13,
+Run on 2026-11-26 from a **fresh clone** of commit `9f4fbbb` (macOS arm64, Python 3.12.13,
 uv 0.12.12), using exactly the commands in the README.
 
 | Command | Result |
@@ -13,14 +13,14 @@ uv 0.12.12), using exactly the commands in the README.
 | `uv sync` | Installed from `uv.lock` |
 | `uv run python -m assistance.seed --reset` | `Seeded data/assistance.db: 2 nonprofits, 8 staff, 5 participants, 4 funds.` |
 | `uv run python -m assistance.seed` (no `--reset`, file exists) | Refused, exit 1: `data/assistance.db already exists. Use --reset to delete it and start again.` |
-| `uv run pytest -q` | `246 passed in 43.71s` |
-| `uv run python scripts/trace.py` | `44 requirements, 87 tagged test functions, wrote docs/TRACEABILITY.md`, exit 0 |
+| `uv run pytest -q` | `248 passed in 43.23s` |
+| `uv run python scripts/trace.py` | `44 requirements, 89 tagged test functions, wrote docs/TRACEABILITY.md`, exit 0 |
 | `uv run python scripts/demo.py` | Exit 0; last line `OK: $300 paid, $0 committed, $9,700 available` |
 
 | Test file | Tests | What it covers |
 |---|---|---|
 | `test_money.py` | 26 | Amount parsing and formatting |
-| `test_rules.py` | 39 | Permission table, transition table, repeat detection |
+| `test_rules.py` | 41 | Permission table, transition table, repeat detection |
 | `test_db.py` | 12 | Constraints, seed/reset, rollback |
 | `test_identity.py` | 12 | Identity from environment; missing and unknown |
 | `test_service_reads.py` | 18 | Reads and nonprofit scoping |
@@ -29,7 +29,7 @@ uv 0.12.12), using exactly the commands in the README.
 | `test_stdio_processes.py` | 11 | Real server processes over stdio: end to end, restart, competing processes |
 | `test_random_sequences.py` | 41 | 40 seeds × 120 random actions, money rules checked after every step |
 | `test_setup.py` | 1 | Pinned versions |
-| **Total** | **246** | **0 failed, 0 skipped** |
+| **Total** | **248** | **0 failed, 0 skipped** |
 
 Requirement → code → test mapping: [TRACEABILITY.md](TRACEABILITY.md) (generated; all 44
 requirements have at least one test and one code reference).
@@ -69,9 +69,10 @@ From [TIME_LOG.md](../TIME_LOG.md), clock times taken with `date`.
 
 | Part | Minutes |
 |---|---|
-| Recorded span, 15:59 to 18:20 IST | 141 |
+| Recorded span of the build, 15:59 to 18:20 IST | 141 |
 | Of which: review, decisions and questions (plan, PRD, tech spec, architecture) | 114 |
 | Of which: AI writing specs, code, tests and this writeup (tasks 0 to 15) | 27 |
+| Later the same day: fixing a test gap found in review, re-verifying, updating these notes (19:05 to 19:06) | 1 |
 | Before 15:59: ideation, reading the brief, checking SDK docs | not captured |
 
 ## 3. Known limitations
@@ -127,3 +128,4 @@ Claude Code was used throughout. Full record: [AI_LOG.md](../AI_LOG.md).
 | AI output | The multi-process test, which passed first time. |
 | Independent check | A first-time pass on a race test proves little, so the guard was broken three ways and each made the test fail (table in section 1). |
 | Correction | The AI's first random-sequence test also passed, but its printed outcome counts showed only 82 of 1,200 steps were successful actions; most were `NOT_FOUND` before any money logic ran. The action mix was fixed (210 successful afterwards) and a second test now fails if any outcome stops occurring. A deliberate payment bug then failed at seed 0. |
+| Correction found in review | After the build, rehearsing a requirement change showed that adding a permission or a transition to `rules.py` passed every test: the rules tests checked each expected entry but never that the tables held only those entries. Two whole-table assertions were added (commit `9f4fbbb`); adding a rule now fails them. This is why the total is 248 tests, not the 246 of the first full run. |
