@@ -25,3 +25,4 @@ Anything not captured that way is marked as such rather than estimated.
 | Task 11: stdio end-to-end and multi-process tests | 18:08 | 18:13 | 5 | Includes 5 repeat runs and 3 deliberate breaks of the guard. |
 | Task 12: random-sequence invariant test | 18:13 | 18:15 | 2 |  |
 | Task 13: traceability script | 18:15 | 18:17 | 2 |  |
+| Task 14: demo script and README | 18:17 | 18:18 | 1 |  |
