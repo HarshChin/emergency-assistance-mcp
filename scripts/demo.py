@@ -32,7 +32,9 @@ FUND = "fund_cb_rent"
 
 # ---------------------------------------------------------------- printing
 
-WIDTH = min(shutil.get_terminal_size().columns, 110)
+# Lay out for the terminal's width, but never narrower than 80 or wider than 110 columns:
+# a very narrow panel would otherwise cut the descriptions short and squeeze the error text.
+WIDTH = max(80, min(shutil.get_terminal_size().columns, 110))
 USE_COLOUR = sys.stdout.isatty() and "NO_COLOR" not in os.environ
 BOLD, DIM, RED, GREEN, YELLOW, CYAN = "1", "2", "31", "32", "33", "1;36"
 
