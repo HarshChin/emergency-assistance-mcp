@@ -5,7 +5,7 @@ Anything not captured that way is marked as such rather than estimated.
 
 | Stage | Start | Stop | Minutes | Notes |
 |---|---|---|---|---|
-| Ideation before this session | not captured | not captured | – | To be filled in by Harshvardhan. |
+| Ideation before the recorded session | not captured | not captured | – | Not recorded. |
 | Read brief, check SDK docs, questions | not captured | 15:59 | – | First timestamp taken at 15:59, after the brief and SDK docs were read. |
 | Decisions on open questions, plan written, plan reviewed and approved | 15:59 | 16:50 | 51 | Includes Harshvardhan's review time. |
 | Task 0: repo, plan, ADR, logs | 16:50 | 16:51 | 1 | |
@@ -40,4 +40,4 @@ Anything not captured that way is marked as such rather than estimated.
 | Before 15:59 (ideation, reading the brief, checking SDK docs) | not captured |
 
 Task rows are short because each is the AI's working time by the machine clock.
-114 + 27 = 141, the recorded span of the build. The later fix found in review took a further 1 minutes.
+114 + 27 = 141, the recorded span of the build. The later fix found in review took a further minute.

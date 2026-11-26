@@ -1,6 +1,7 @@
 # Technical Specification: Emergency Assistance Funding
 
 Version 1 (2026-11-26). Implements [PRD.md](PRD.md). Decisions are justified in [ADR.md](ADR.md).
+Changes after the first commit are listed in [REVISIONS.md](REVISIONS.md).
 Requirement IDs in brackets show what each part satisfies.
 
 ## 1. Stack
@@ -53,7 +54,7 @@ All tables are SQLite `STRICT` tables with `PRAGMA foreign_keys = ON`.
 | Input | `amount_usd`: string matching `^[0-9]{1,7}\.[0-9]{2}$`, value greater than zero. Parsed by splitting on the dot: `dollars * 100 + cents`. |
 | Output | Same form, no separators: `9700.00`. Field names end in `_usd`. |
 | Available | Never stored. Always `allocation_cents - committed_cents - paid_cents` [BR-08]. |
-| Rejected input | The error repeats what was sent and shows the form to use, e.g. `[INVALID_AMOUNT] amount_usd must be dollars with exactly two decimals, like "300.00". You sent "300". Do not send cents, a currency symbol or commas.` [NFR-02] |
+| Rejected input | The error repeats what was sent and shows the form to use, e.g. `[INVALID_AMOUNT] amount_usd must be dollars with exactly two decimals, like "300.00" for three hundred dollars. You sent "300". Do not send cents, a currency symbol or commas. The maximum is "9999999.99".` [NFR-02] |
 
 ## 5. Identity, roles and nonprofit boundaries
 

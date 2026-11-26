@@ -1,5 +1,11 @@
 # Plan: Emergency Assistance Funding MCP server
 
+> This is the plan as approved on 2026-11-26, before any file was created. It was written by the
+> AI assistant for me to review, which is why it says "you" and "I". It is kept as approved, except
+> that local file paths and notes not relevant to the submission were removed. How the work
+> actually went is in `TIME_LOG.md`, `AI_LOG.md` and `docs/SUBMISSION.md`; changes to the
+> specification are in `docs/REVISIONS.md`.
+
 ## Context
 
 Community Bridge tracks assistance requests and fund balances in spreadsheets. The brief asks for a headless MCP server:

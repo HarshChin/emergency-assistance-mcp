@@ -8,10 +8,10 @@ pasted from real runs; nothing is estimated.
 Run on 2026-11-26 from a **fresh clone** of commit `db4b0cc` (macOS arm64, Python 3.12.13,
 uv 0.12.12), using exactly the commands in the README.
 
-Commit hashes in this file are the published ones. Before the repository was pushed, the
-author email on every commit was changed to a GitHub private address, which changes the hashes
-but not the files: the run above was made on the same tree under its earlier hash `9f4fbbb`.
-Two commit messages still mention earlier hashes (`a6ef267`, `9f4fbbb`).
+A note on commit hashes: before the first push, the author email on every commit was changed,
+which changes every hash but no file. This file quotes the published hashes. The run above was
+made on exactly the same files when that commit was still `9f4fbbb`, and two older commit
+messages still mention pre-push hashes (`a6ef267`, `9f4fbbb`).
 
 | Command | Result |
 |---|---|
@@ -61,7 +61,7 @@ reservation is one guarded `UPDATE`, and `CHECK` constraints on `funds` are the 
 | Check | Status |
 |---|---|
 | Any test in the final suite | None failed |
-| A real MCP host (Claude Desktop, Claude Code, an LLM calling the tools) | **Not run.** Only the SDK's own `Client` was used, in memory and over stdio. The README config block is untested. |
+| A real MCP host | **Partly run.** The three servers were registered in Claude Code with the README commands, and `claude mcp list` showed all three `✔ Connected`. A language model actually calling the tools through Claude Code was **not** tested; every tool call in this report was made by the SDK's own `Client`, in memory and over stdio. Other hosts (Claude Desktop, IDEs): not run. |
 | Other platforms | **Not run.** macOS arm64 and Python 3.12.13 only. |
 | More than 10 competing processes, or writes waiting longer than the 5 s busy timeout | **Not run.** |
 | Linting or type checking | **Not run.** None is configured. |
@@ -96,7 +96,7 @@ From [TIME_LOG.md](../TIME_LOG.md), clock times taken with `date`.
 
 ## 4. Next priorities
 
-1. Connect a real MCP host with an LLM and watch whether the model recovers from each error message.
+1. Have a language model drive the tools through Claude Code and watch whether it recovers from each error message.
 2. HTTP transport with OAuth: `TokenVerifier`, audience check, token subject → staff row.
 3. Return a coded `TRY_AGAIN` error when the busy timeout is hit.
 4. Composite foreign keys so the database itself enforces that a request's participant and fund belong to its nonprofit.
@@ -114,7 +114,7 @@ Claude Code was used throughout. Full record: [AI_LOG.md](../AI_LOG.md).
 |---|---|
 | Prompt | "tell me in simple words what you understood from the doc" and "list the questions you'd ask the business where the doc is unclear. give me your suggestion for each but I'll take the call" |
 | AI output | A summary and 14 questions with suggested answers; four flagged as changing the tool design. I decided those four; the rest are listed as assumptions in the PRD. |
-| Independent check | The summary was checked against the brief's own arithmetic example, which is now test `test_ac01...` and `test_ac02...`. |
+| Independent check | The summary was checked against the brief's own arithmetic example, which is now `test_ac01_approving_300_against_10000_leaves_9700_available` and `test_ac02_paying_moves_committed_to_paid_and_available_stays_9700`. |
 | Correction | The AI's PRD said every refusal carries an error code. While writing the tech spec it found the SDK refuses schema-invalid arguments before tool code runs. PRD reworded (REVISIONS.md row 1); later confirmed by `test_ac21_an_amount_sent_as_a_number_is_refused_and_creates_nothing`. |
 
 ### Implementation planning and coding

@@ -1,6 +1,7 @@
 # Architecture: Emergency Assistance Funding
 
-Version 1 (2026-11-26). Builds on [PRD.md](PRD.md) and [TECH_SPEC.md](TECH_SPEC.md).
+Version 1 (2026-11-26). Builds on [PRD.md](PRD.md) and [TECH_SPEC.md](TECH_SPEC.md). Changes after
+the first commit are listed in [REVISIONS.md](REVISIONS.md).
 
 ## 1. Shape of the system
 
@@ -9,11 +10,11 @@ one SQLite file. All coordination between them is done by the database.
 
 | Component | File | Responsibility | Knows about |
 |---|---|---|---|
-| Tool layer | `server.py` | Declares the 9 tools. Each tool: resolve caller → call one service function → return a model. Turns `AppError` into `ToolError`. Logs one line per call. | MCP SDK, service, identity |
+| Tool layer | `server.py` | Declares the 9 tools. Each tool: resolve caller → call one service function → return a model. Turns `AppError` into `ToolError`. Logs one line per call. | MCP SDK, service, identity, models, errors, db |
 | Identity | `identity.py` | Environment variable → staff row → `Caller` | db |
 | Rules | `rules.py` | The role-permission table and the status-transition table | errors |
 | Money | `money.py` | `"300.00"` ↔ `30000` | errors |
-| Service | `service.py` | Every business operation and every SQL statement, always scoped by the caller's nonprofit | rules, money, db, errors |
+| Service | `service.py` | Every business operation and every SQL statement, always scoped by the caller's nonprofit | rules, money, db, errors, models, identity (`Caller`) |
 | Database | `db.py`, `schema.sql` | Open a connection, run a `BEGIN IMMEDIATE` transaction | sqlite3 |
 | Models | `models.py` | Pydantic output shapes | nothing |
 | Errors | `errors.py` | `AppError(code, message)` | nothing |
@@ -80,8 +81,9 @@ The same mechanism covers the same request approved from two processes (second o
 `APPROVED` and returns `replayed`) and the same payment recorded twice.
 
 How this is verified: a test starts real server processes with `Client(StdioServerParameters)`,
-fires the approvals together, and asserts the exact outcome of AC-08. The guard is then broken on
-purpose once to confirm the test fails; the result is recorded as it happened.
+fires the approvals together, and asserts the exact outcome of AC-08. To show the test really
+races, the guard was then broken on purpose three ways and the test failed each time; the
+results are in [SUBMISSION.md](SUBMISSION.md) section 1 and `AI_LOG.md` section 4.
 
 ## 4. Implementation tasks
 
@@ -112,5 +114,5 @@ committed and tagged `spec-v1` before task 4.
 | Define done before starting | Each task has a gate that can be run, not an opinion. |
 | Tests carry requirement IDs | Every test is tagged, and `scripts/trace.py` fails the build if a requirement has no test. |
 | Review every diff | I read each change before it is committed and must be able to explain it. Checklist: no identity-like tool argument; every query on an owned table filters by nonprofit; money is integers only; permissions and transitions come only from `rules.py`; no new dependency; nothing from the out-of-scope list. |
-| Check claims independently | SDK behaviour is confirmed by running it, not by the agent's recall (docs were read first; section 12 of the tech spec lists what still needs a test). The concurrency test is proven by breaking the guard and watching it fail. |
+| Check claims independently | SDK behaviour is confirmed by running it, not by the agent's recall (docs were read first; section 12 of the tech spec lists each assumption and the test that confirmed it). The concurrency test is proven by breaking the guard and watching it fail. |
 | Keep an honest record | `AI_LOG.md` records prompts, suggestions, evidence and real corrections. `REVISIONS.md` records spec changes and why. |
