@@ -26,3 +26,16 @@ Anything not captured that way is marked as such rather than estimated.
 | Task 12: random-sequence invariant test | 18:13 | 18:15 | 2 |  |
 | Task 13: traceability script | 18:15 | 18:17 | 2 |  |
 | Task 14: demo script and README | 18:17 | 18:18 | 1 |  |
+| Task 15: fresh-clone verification and final writeup | 18:18 | 18:20 | 2 |  |
+
+## Totals
+
+| Part | Minutes |
+|---|---|
+| Recorded span, 15:59 to 18:20 | 141 |
+| Review, decisions and questions (rows marked as review, plus the planning row) | 116 |
+| AI writing specs, code, tests and the writeup (task rows) | 27 |
+| Before 15:59 (ideation, reading the brief, checking SDK docs) | not captured |
+
+Task rows are short because each is the AI's working time by the machine clock. The two
+parts do not add up exactly to the span because start and stop times are whole minutes.
