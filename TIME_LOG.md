@@ -19,3 +19,4 @@ Anything not captured that way is marked as such rather than estimated.
 | Task 5: money, rules, errors | 18:01 | 18:02 | 1 |  |
 | Task 6: schema, db, seed | 18:02 | 18:03 | 1 |  |
 | Task 7: identity | 18:03 | 18:04 | 1 |  |
+| Task 8: service reads | 18:04 | 18:05 | 1 |  |
