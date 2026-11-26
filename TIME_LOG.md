@@ -14,3 +14,5 @@ Anything not captured that way is marked as such rather than estimated.
 | Task 2: tech spec | 17:14 | 17:16 | 2 | Includes PRD revision 1. |
 | Tech spec review | 17:16 | 17:51 | 35 | Harshvardhan reviewing. |
 | Task 3: architecture, tag spec-v1 | 17:51 | 17:52 | 1 | |
+| Architecture review | 17:52 | 17:59 | 7 | Harshvardhan reviewing. |
+| Task 4: scaffold, SDK check | 17:59 | 18:01 | 2 |  |

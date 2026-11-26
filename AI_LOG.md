@@ -20,7 +20,7 @@ as the work happens. Corrections are logged only when they actually occurred.
 | AI did | Queried PyPI for the `mcp` package and read the docs at py.sdk.modelcontextprotocol.io (Tools, Structured Output, Handling errors, Running your server, Client transports, Testing, Authorization). |
 | Found | Latest release is 2.3.0 and the v2 API differs from v1: `MCPServer` replaces `FastMCP`; one `Client` class connects in-memory or spawns a stdio process; a stdio child does not inherit the parent's environment; `ToolError` gives the model readable text but a failed call carries no structured content. |
 | Effect on the design | ADR-01 (pin v2), ADR-11 (error code carried in the text as `[CODE] ...`), and the launcher must pass the identity through `env=`. |
-| How it was checked | From the published docs only, so far. To be confirmed by running code: scaffold (task 4) and in-memory MCP tests (task 10). |
+| How it was checked | First from the published docs. Then, at task 4, a throwaway script (not committed) called a one-tool `MCPServer` through the in-memory `Client`: a number sent for a string field was refused, an extra `role` argument never reached the function, `ToolError` text arrived as `Error executing tool echo: [CODE] ...`, and the tool ran in an `AnyIO worker thread`. All four matched the docs. Permanent tests for these come in task 10. |
 
 ## 3. Planning (2026-11-26)
 

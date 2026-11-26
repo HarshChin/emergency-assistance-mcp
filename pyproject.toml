@@ -1,0 +1,28 @@
+[project]
+name = "assistance"
+version = "0.1.0"
+description = "Emergency Assistance Funding: a headless MCP server (Bonterra take-home)"
+authors = [
+    { name = "Harshvardhan Chincholkar" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "mcp==2.3.0",
+    "pydantic==2.14.4",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.12,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest==9.2.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers"
+markers = [
+    "req(*ids): requirement IDs from docs/PRD.md that this test covers",
+]
