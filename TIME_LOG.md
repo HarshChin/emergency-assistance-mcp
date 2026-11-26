@@ -12,3 +12,5 @@ Anything not captured that way is marked as such rather than estimated.
 | Task 1: PRD | 16:51 | 16:53 | 2 | Stops when the PRD is committed; review time is logged separately. |
 | PRD review, questions about resources and prompts | 16:53 | 17:14 | 21 | Harshvardhan reviewing; AI answering. |
 | Task 2: tech spec | 17:14 | 17:16 | 2 | Includes PRD revision 1. |
+| Tech spec review | 17:16 | 17:51 | 35 | Harshvardhan reviewing. |
+| Task 3: architecture, tag spec-v1 | 17:51 | 17:52 | 1 | |
