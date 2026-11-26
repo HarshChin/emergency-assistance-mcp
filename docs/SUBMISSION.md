@@ -15,7 +15,7 @@ uv 0.12.12), using exactly the commands in the README.
 | `uv run python -m assistance.seed` (no `--reset`, file exists) | Refused, exit 1: `data/assistance.db already exists. Use --reset to delete it and start again.` |
 | `uv run pytest -q` | `248 passed in 43.23s` |
 | `uv run python scripts/trace.py` | `44 requirements, 89 tagged test functions, wrote docs/TRACEABILITY.md`, exit 0 |
-| `uv run python scripts/demo.py` | Exit 0; last line `OK: $300 paid, $0 committed, $9,700 available` |
+| `uv run python scripts/demo.py` | Exit 0; last line `✓ OK: $300 paid, $0 committed, $9,700 available` |
 
 | Test file | Tests | What it covers |
 |---|---|---|
