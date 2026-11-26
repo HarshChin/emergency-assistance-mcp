@@ -21,3 +21,4 @@ Anything not captured that way is marked as such rather than estimated.
 | Task 7: identity | 18:03 | 18:04 | 1 |  |
 | Task 8: service reads | 18:04 | 18:05 | 1 |  |
 | Task 9: service writes | 18:05 | 18:07 | 2 |  |
+| Task 10: MCP tools | 18:07 | 18:08 | 1 |  |

@@ -191,15 +191,15 @@ command always produces the same data [FR-12].
 
 ## 12. SDK behaviour assumed from the docs
 
-Taken from the SDK documentation on 2026-11-26 and not yet run. Each is confirmed by a test in
-implementation; any difference is logged in [REVISIONS.md](REVISIONS.md).
+Taken from the SDK documentation on 2026-11-26 before any code was written, then checked by
+running it. All four held; see revision 3 in [REVISIONS.md](REVISIONS.md).
 
-| # | Assumption | Matters for |
-|---|---|---|
-| S1 | A JSON number sent for a `str` parameter is refused, not converted to a string | AC-21 (`300` as a number) |
-| S2 | Unknown extra arguments never reach our function | AC-22, SEC-07 |
-| S3 | `ToolError` text reaches the client as `Error executing tool <tool>: <message>` with `is_error: true` | Section 7 |
-| S4 | Plain `def` tools run in worker threads | Section 8, one connection per call |
+| # | Assumption | Matters for | Confirmed by |
+|---|---|---|---|
+| S1 | A JSON number sent for a `str` parameter is refused, not converted to a string | AC-21 (`300` as a number) | `test_ac21_an_amount_sent_as_a_number_is_refused_and_creates_nothing` |
+| S2 | Unknown extra arguments never reach our function | AC-22, SEC-07 | `test_ac22_extra_arguments_naming_a_role_or_nonprofit_change_nothing` |
+| S3 | `ToolError` text reaches the client as `Error executing tool <tool>: <message>` with `is_error: true` | Section 7 | `test_a_business_refusal_arrives_as_an_error_with_a_code_and_a_fix` |
+| S4 | Plain `def` tools run in worker threads | Section 8, one connection per call | A throwaway script only (thread name was `AnyIO worker thread`). No permanent test: one connection per call is correct in any thread. |
 
 ## 13. Requirement coverage
 
