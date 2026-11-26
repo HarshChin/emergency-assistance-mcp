@@ -11,8 +11,8 @@ one SQLite file. All coordination between them is done by the database.
 |---|---|---|---|
 | Tool layer | `server.py` | Declares the 9 tools. Each tool: resolve caller → call one service function → return a model. Turns `AppError` into `ToolError`. Logs one line per call. | MCP SDK, service, identity |
 | Identity | `identity.py` | Environment variable → staff row → `Caller` | db |
-| Rules | `rules.py` | The role-permission table and the status-transition table | nothing |
-| Money | `money.py` | `"300.00"` ↔ `30000` | nothing |
+| Rules | `rules.py` | The role-permission table and the status-transition table | errors |
+| Money | `money.py` | `"300.00"` ↔ `30000` | errors |
 | Service | `service.py` | Every business operation and every SQL statement, always scoped by the caller's nonprofit | rules, money, db, errors |
 | Database | `db.py`, `schema.sql` | Open a connection, run a `BEGIN IMMEDIATE` transaction | sqlite3 |
 | Models | `models.py` | Pydantic output shapes | nothing |
@@ -20,7 +20,7 @@ one SQLite file. All coordination between them is done by the database.
 | Seed | `seed.py` | Reset and load fixture data. Run by hand, never by the server | db |
 
 Dependencies point one way: `server → identity, service → rules, money, db`. `rules.py` and
-`money.py` import nothing from the project, so they can be changed and tested alone.
+`money.py` import only `errors.py`, so they can be changed and tested alone.
 
 ## 2. How a tool call flows
 
